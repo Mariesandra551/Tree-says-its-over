@@ -10,21 +10,7 @@ The emphasis is on **clarity and interpretability**, showing how even basic mach
 
 ## Repository Structure
 
-project_root/
-│
-├── data/
-│   ├── *.csv                       # Raw data files for Greece (debt, deficit, yields, etc.)
-│   ├── merged_cleaned_dataset.csv  # Output from model.py
-│   ├── crisis_model.pkl            # Trained logistic regression model
-│   ├── imputer.pkl                 # Median imputer for missing data
-│   ├── scaler.pkl                  # StandardScaler for normalization
-│   ├── top10_crisis_probs.csv      # Table of top 10 predicted crisis-risk periods
-│   └── top10_crisis_probs.png      # Visualization of predicted crisis probabilities
-│
-├── model.py                        # Cleans and merges raw data into a standardized dataset
-├── train_model.py                  # Trains logistic regression model and saves components
-├── Visualize_predictions.py        # Generates a visualization and CSV of top crisis probabilities
-└── README.md                       # Project documentation
+<pre> project_root/ │ ├── data/ │ ├── *.csv # Raw data files for Greece (debt, deficit, yields, etc.) │ ├── merged_cleaned_dataset.csv # Output from model.py │ ├── crisis_model.pkl # Trained logistic regression model │ ├── imputer.pkl # Median imputer for missing data │ ├── scaler.pkl # StandardScaler for normalization │ ├── top10_crisis_probs.csv # Table of top 10 predicted crisis-risk periods │ └── top10_crisis_probs.png # Visualization of predicted crisis probabilities │ ├── model.py # Cleans and merges raw data into a standardized dataset ├── train_model.py # Trains logistic regression model and saves components ├── Visualize_predictions.py # Generates a visualization and CSV of top crisis probabilities └── README.md # Project documentation </pre>
 
 ---
 
@@ -124,6 +110,7 @@ python train_model.py
 
 # Step 3: Visualize predictions
 python Visualize_predictions.py
+
 
 
 
