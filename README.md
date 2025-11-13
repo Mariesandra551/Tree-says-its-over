@@ -10,7 +10,7 @@ The emphasis is on **clarity and interpretability**, showing how even basic mach
 
 ## Repository Structure
 
-project_root/
+📁 project_root/
 │
 ├── data/
 │ ├── *.csv # Raw data files for Greece (debt, deficit, yields, etc.)
@@ -124,3 +124,4 @@ python train_model.py
 
 # Step 3: Visualize predictions
 python Visualize_predictions.py
+
