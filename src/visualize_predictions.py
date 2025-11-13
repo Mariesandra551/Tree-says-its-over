@@ -8,6 +8,43 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import os
 
+
+
+"""
+Visualize_predictions.py
+------------------------
+
+This script generates a visual and tabular summary of the top predicted crisis probabilities
+from the trained logistic regression model. It loads the saved model, imputer, and scaler
+produced by `train_model.py`, applies them to the cleaned dataset from `model.py`, and
+creates an interpretable visualization of countries or years most at risk of financial crisis.
+
+Main steps:
+    1. Load the trained model, imputer, scaler, and cleaned dataset.
+    2. Identify key columns such as "change", "country", and "year".
+    3. Prepare input features for prediction by aligning, imputing, and scaling them.
+    4. Generate predicted crisis probabilities for each observation.
+    5. Select the top 10 highest-risk observations and display their probabilities,
+       countries, and regions.
+    6. Save both a CSV table and a horizontal bar chart showing the top predicted risks.
+
+Outputs:
+    - ../data/top10_crisis_probs.csv : Table of top 10 crisis-risk observations
+    - ../data/top10_crisis_probs.png : Visualization of predicted crisis probabilities
+
+Purpose:
+    This script provides a transparent and visual way to interpret the model's predictions.
+    It highlights which observations (e.g., specific years for Greece) the model considers
+    most at risk, helping illustrate how early-warning tools can inform policymakers and
+    economists before a crisis develops.
+
+Intended Use:
+    Part of the ECON 302 project on building an early-warning system for the Greek
+    financial crisis using economic indicators and machine learning.
+    The focus is on clarity, reproducibility, and clear economic interpretation rather
+    than algorithmic complexity.
+"""
+
 print("Loading model and preprocessing tools...")
 DATA_DIR = "../data"
 MODEL_PATH = os.path.join(DATA_DIR, "crisis_model.pkl")

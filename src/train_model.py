@@ -8,6 +8,47 @@ from sklearn.impute import SimpleImputer
 from sklearn.utils import resample
 from sklearn.preprocessing import StandardScaler
 
+
+
+"""
+train_model.py
+----------------
+
+This script trains a simple machine learning model that serves as an early warning system
+for financial crises, using historical economic data from Greece.
+
+The model applies logistic regression to predict whether a given period shows signs of
+financial distress (crisis) based on macroeconomic and market indicators such as
+deficits, debt levels, and bond yield changes. It prioritizes interpretability over
+complexity, aiming to demonstrate how machine learning can complement economic theory
+in crisis forecasting.
+
+Main steps:
+    1. Load the cleaned dataset produced by model.py.
+    2. Automatically detect a column representing economic change and create a binary
+       crisis label (1 = crisis, 0 = stable).
+    3. Prepare features by selecting numeric columns and dropping empty ones.
+    4. Handle data imbalance through upsampling of the minority (crisis) class.
+    5. Impute missing values and scale all numeric features.
+    6. Split the data into training and testing sets.
+    7. Train a logistic regression classifier with class balancing enabled.
+    8. Evaluate performance using accuracy and classification metrics.
+    9. Save the trained model, imputer, and scaler as reusable .pkl files.
+
+Inputs:
+    - ../data/merged_cleaned_dataset.csv : Cleaned dataset created by model.py
+
+Outputs:
+    - ../data/crisis_model.pkl  : Trained logistic regression model
+    - ../data/imputer.pkl       : Median imputer for missing value handling
+    - ../data/scaler.pkl        : StandardScaler for feature normalization
+
+Intended Use:
+    This file is part of an academic project (ECON 302) demonstrating how economic
+    indicators and simple machine learning can be used to detect early warning signs
+    of financial crises in a transparent, explainable way.
+"""
+
 # ------------------------------
 # 1. Load dataset
 # ------------------------------

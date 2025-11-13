@@ -2,6 +2,42 @@ import pandas as pd
 import glob
 import os
 
+
+
+"""
+model.py
+---------
+
+This script prepares and consolidates raw economic data files into a single, standardized
+dataset suitable for analysis and model training. It automatically detects header rows,
+cleans inconsistent column names, converts numeric values to floats, and merges multiple
+CSV files into one uniform dataset.
+
+The goal is to create a reliable data foundation for the early warning system model
+that predicts financial crisis risk in Greece.
+
+Main steps:
+    1. Read all CSV files from the 'data/' directory.
+    2. Automatically detect the correct header row (first row containing 'Date').
+    3. Standardize column names (convert to lowercase, replace spaces, symbols, etc.).
+    4. Remove duplicate columns and add a 'country' column based on file names.
+    5. Clean numeric values by removing commas and percent signs.
+    6. Concatenate all cleaned datasets into one combined DataFrame.
+    7. Save the final, cleaned dataset for machine learning.
+
+Inputs:
+    - data/*.csv : Raw economic data files (e.g., debt, deficit, yields, inflation)
+
+Outputs:
+    - data/merged_cleaned_dataset.csv : Combined and cleaned dataset ready for training
+
+Intended Use:
+    This file is part of the ECON 302 project on predicting financial crises using
+    economic indicators and machine learning. It ensures that all input data are
+    consistent, accurate, and formatted for reproducible modeling.
+"""
+
+
 files = glob.glob("data/*.csv")
 
 dfs = []
