@@ -1,87 +1,95 @@
 import pandas as pd
-import glob
-import os
+from pathlib import Path
 
 
 
 """
 model.py
----------
 
-This script prepares and consolidates raw economic data files into a single, standardized
-dataset suitable for analysis and model training. It automatically detects header rows,
-cleans inconsistent column names, converts numeric values to floats, and merges multiple
-CSV files into one uniform dataset.
+This script reads multiple sheets from the Excel file
+`Final Greek Crisis Data.xlsx`, each sheet representing one country.
+It restructures the data into a machine-learning–ready format and merges all
+countries into a single CSV output (`merged_cleaned_dataset.csv`).
 
-The goal is to create a reliable data foundation for the early warning system model
-that predicts financial crisis risk in Greece.
+Workflow:
+1. Read all sheets from the Excel file.
+2. Standardize column names and datetime formats.
+3. Reshape each sheet into tidy form:
+       | date | bond_yield_change | cds_change | deficit_change | country |
+4. Merge all sheets using outer join to keep all available data.
+5. Remove rows where ALL three values are missing.
+6. Sort results by country (A–Z) and date in descending order.
+7. Save final output to `data/merged_cleaned_dataset.csv`.
 
-Main steps:
-    1. Read all CSV files from the 'data/' directory.
-    2. Automatically detect the correct header row (first row containing 'Date').
-    3. Standardize column names (convert to lowercase, replace spaces, symbols, etc.).
-    4. Remove duplicate columns and add a 'country' column based on file names.
-    5. Clean numeric values by removing commas and percent signs.
-    6. Concatenate all cleaned datasets into one combined DataFrame.
-    7. Save the final, cleaned dataset for machine learning.
-
-Inputs:
-    - data/*.csv : Raw economic data files (e.g., debt, deficit, yields, inflation)
-
-Outputs:
-    - data/merged_cleaned_dataset.csv : Combined and cleaned dataset ready for training
-
-Intended Use:
-    This file is part of the ECON 302 project on predicting financial crises using
-    economic indicators and machine learning. It ensures that all input data are
-    consistent, accurate, and formatted for reproducible modeling.
+This file forms the core dataset used for time-series analysis,
+feature engineering, and machine learning model development for
+crisis prediction.
 """
 
+# ------------------------------
+# 1. Paths
+# ------------------------------
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR.parent / "data" / "Final Greek Crisis Data.xlsx"
+OUT_PATH = BASE_DIR.parent / "data" / "merged_cleaned_dataset.csv"
 
-files = glob.glob("data/*.csv")
+print("Reading:", DATA_PATH)
 
+# ------------------------------
+# 2. Function to process ONE sheet
+# ------------------------------
+def process_sheet(country_name, df):
+    df.columns = df.columns.str.strip().str.lower()
+
+    expected = ["date1", "bond_yield_change", "date2", "cds_change", "date3", "deficit_change"]
+    missing = [col for col in expected if col not in df.columns]
+    if missing:
+        print(f"⚠ Missing columns in {country_name}: {missing}")
+        return None
+
+    # Convert date columns
+    for col in ["date1", "date2", "date3"]:
+        df[col] = pd.to_datetime(df[col], errors="coerce", format="%Y-%m-%d")
+
+    # Create tidy format
+    df_bond = df[["date1", "bond_yield_change"]].rename(columns={"date1": "date"})
+    df_cds = df[["date2", "cds_change"]].rename(columns={"date2": "date"})
+    df_def = df[["date3", "deficit_change"]].rename(columns={"date3": "date"})
+
+    merged = df_bond.merge(df_cds, on="date", how="outer")
+    merged = merged.merge(df_def, on="date", how="outer")
+    merged = merged.sort_values("date", ascending=False)
+    merged["country"] = country_name
+
+    return merged
+
+# ------------------------------
+# 3. Process all sheets
+# ------------------------------
+excel_data = pd.read_excel(DATA_PATH, sheet_name=None)
 dfs = []
 
-for file in files:
-    print("Processing:", file)
+for name, sheet in excel_data.items():
+    print(f"\nProcessing sheet: {name}")
+    cleaned = process_sheet(name, sheet)
+    if cleaned is not None:
+        dfs.append(cleaned)
 
-    raw = pd.read_csv(file, header=None)
+# ------------------------------
+# 4. Final dataset + filter + sort
+# ------------------------------
+if dfs:
+    df_final = pd.concat(dfs, ignore_index=True)
 
-    # detect header row (first row with the word "Date")
-    header_row = raw[raw.apply(lambda row: row.astype(str).str.contains("Date", case=False)).any(axis=1)].index[0]
+    # Keep rows with at least ONE valid value
+    df_final = df_final.dropna(subset=["bond_yield_change", "cds_change", "deficit_change"], how="all")
 
-    temp = pd.read_csv(file, header=header_row)
+    # Correct sorting by country + descending date
+    df_final = df_final.sort_values(["country", "date"], ascending=[True, False])
 
-    # Standardize column names
-    temp.columns = (
-        temp.columns.astype(str)
-        .str.strip()
-        .str.lower()
-        .str.replace(" ", "_")
-        .str.replace("%", "pct")
-        .str.replace("/", "_")
-    )
-
-    # Remove duplicated columns
-    temp = temp.loc[:, ~temp.columns.duplicated()]
-
-    # Add country column based on filename
-    temp["country"] = os.path.basename(file).replace(".csv", "")
-
-    dfs.append(temp)
-
-# Combine all cleaned data
-df = pd.concat(dfs, ignore_index=True)
-
-# Convert numeric columns (remove commas, convert to float)
-for col in df.columns:
-    try:
-        df[col] = df[col].astype(str).str.replace(",", "").str.replace("%", "").astype(float)
-    except:
-        pass
-
-print("\n Final dataset shape:", df.shape)
-print(df.head())
-
-df.to_csv("data/merged_cleaned_dataset.csv", index=False)
-print("\n Saved cleaned dataset → data/merged_cleaned_dataset.csv")
+    df_final.to_csv(OUT_PATH, index=False)
+    print("\nSUCCESS — Saved to:", OUT_PATH)
+    print("Final shape:", df_final.shape)
+    print(df_final.head())
+else:
+    print("\n⚠ No valid data found in any sheet.")
