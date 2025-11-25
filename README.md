@@ -29,21 +29,6 @@ The emphasis is on **clarity and interpretability** — showing how basic ML too
 
 ---
 
-## Methodology
-
-| Step | Description |
-|------|-------------|
-| **Feature Engineering** | Rolling mean and volatility shocks for bond, CDS, deficit |
-| **Regime Detection** | GMM clustering reveals hidden economic states |
-| **Smoothing** | 6-month rolling average improves stability |
-| **Forecasting** | Random Forest predicts next-month regime |
-| **Alerting** | Binary `crisis_alert` + traffic-light risk levels |
-| **Validation** | TimeSeriesSplit prevents future data leakage |
-| **Visualization** | Contagion maps, regime evolution, risk trends |
-| **Dashboard** | Interactive Streamlit interface |
-
----
-
 ## Results
 
 The system successfully identifies periods where **fiscal imbalance + market stress** align with **high crisis probability**.
@@ -64,5 +49,6 @@ The model captures **pre-crisis stress buildup**, demonstrating early warning po
 
 **2. Launch dashboard:**
  streamlit run src/dashboard_app.py
+
 
 
