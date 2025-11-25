@@ -1,79 +1,67 @@
-Crisis Risk Identification System for Economic Stability (C.R.I.S.E.S)
+# C.R.I.S.E.S  
+**Crisis Risk Identification System for Economic Stability**
 
-A Global Financial Crisis Early-Warning System
+---
 
-🧠 Overview
+## Overview
 
-This system detects and forecasts financial instability across countries using:
-✔ Gaussian Mixture Models (GMM)
-✔ Regime probability smoothing
-✔ Time-series forecasting
-✔ Interactive dashboard for real-time analysis
+This project builds a **global financial crisis early warning system** that detects and forecasts economic stress using:
 
-It analyzes macroeconomic shock indicators — bond yields, CDS spreads, and government deficits — to detect economic regimes and crisis risk, helping analysts, policymakers, and researchers anticipate stress before it becomes a crisis.
+- Gaussian Mixture Models (GMM)  
+- Economic shock feature engineering  
+- Regime probability smoothing  
+- Time-series forecasting  
+- Decision-support dashboard (Streamlit)
 
-The emphasis is on clarity and interpretability, showing how basic but well-designed ML tools can complement economic intuition.
+It analyzes macroeconomic indicators such as **bond yields, CDS spreads, and government deficits** to detect **hidden economic regimes** (Normal, Stress, Crisis) and generate **next-month crisis alerts** using machine learning.
 
-🎯 Objectives
+The emphasis is on **clarity and interpretability** — showing how basic ML tools can complement economic reasoning for crisis forecasting.
 
-Detect macro-financial stress periods across countries
+---
 
-Reveal hidden economic regimes (Normal / Stress / Crisis)
+##  Objectives
 
-Predict next-month regime transitions
+- Detect macro-financial stress periods across countries  
+- Reveal **hidden economic regimes**  
+- Predict **next-month crisis likelihood**  
+- Build an **interactive dashboard** for analysis  
+- Support interpretation using **feature importance, contagion maps, and regime evolution**
 
-Provide an interactive Streamlit dashboard
+---
 
-Support interpretation with feature importance, contagion heatmaps, and regime evolution
+## Methodology
 
-🔍 Methodology
-Step	Description
-Feature Engineering	Rolling mean and volatility shocks for bond, CDS, and deficit
-Regime Detection	GMM identifies hidden economic states
-Smoothing	6-month rolling average stabilizes probability curves
-Forecasting	Random Forest predicts next-month regime
-Alerting	Binary crisis_alert + traffic-light labels
-Validation	TimeSeriesSplit prevents data leakage
-Visualization	Contagion matrix, regime evolution, trend lines
-Dashboard	Streamlit interface for exploration & export
-📈 Results
+| Step | Description |
+|------|-------------|
+| **Feature Engineering** | Rolling mean and volatility shocks for bond, CDS, deficit |
+| **Regime Detection** | GMM clustering reveals hidden economic states |
+| **Smoothing** | 6-month rolling average improves stability |
+| **Forecasting** | Random Forest predicts next-month regime |
+| **Alerting** | Binary `crisis_alert` + traffic-light risk levels |
+| **Validation** | TimeSeriesSplit prevents future data leakage |
+| **Visualization** | Contagion maps, regime evolution, risk trends |
+| **Dashboard** | Interactive Streamlit interface |
 
-The model successfully detects periods where fiscal imbalance + market stress align with high crisis probability.
+---
 
-Key Predictive Features
+## Results
 
-Deficit-to-GDP ratio
+The system successfully identifies periods where **fiscal imbalance + market stress** align with **high crisis probability**.
 
-Debt-to-GDP ratio
+### Key Predictive Features
+- Deficit-to-GDP ratio  
+- Debt-to-GDP ratio  
+- Bond yield spreads (Greek vs German)
 
-Bond yield spreads (Greek vs. German)
+The model captures **pre-crisis stress buildup**, demonstrating early warning potential rather than perfect event prediction. This model **does not predict exact financial crises**. Instead, it acts as a **decision-support tool**, flagging **rising economic vulnerability** using market-based indicators and economic intuition.
 
-The visualizations highlight the exact years markets expressed concern before the official crisis, showing early stress signals.
+---
 
-🧾 Interpretation
+## How to Run
 
-Even a simple model can detect early warning signs of financial instability.
-This should not be viewed as a crisis predictor, but as a decision-support tool
-that flags periods of rising vulnerability.
-
-⚠ Challenges & Solutions
-Challenge	Mitigation
-Limited and inconsistent data	Interpolation + median imputation
-Small dataset	Upsampling of crisis observations
-Correlated variables	Use only interpretable indicators
-Asymmetric information	Use market-based indicators (CDS)
-Delayed fiscal reporting	Combine slow + fast signals
-📜 License
-
-This project is for educational and academic purposes only.
-You may reuse or adapt with proper citation.
-
-⚙️ How to Run
-1️⃣ Install Dependencies
+**1. Install dependencies**
 pip install -r requirements.txt
 
-2️⃣ Run Full Pipeline (Generate Data & Model)
-python src/pipeline.py
-
-3️⃣ Launch Streamlit Dashboard
+**2. Launch dashboard**
 streamlit run src/dashboard_app.py
+
