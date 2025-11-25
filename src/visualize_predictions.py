@@ -47,17 +47,23 @@ if "country" in df.columns and "date" in df.columns:
     print(f"✔ Saved: {output_greece}")
 
 # ------------------------------
-# 2. Contagion Matrix (correlation)
+# 2. Contagion Matrix (correlation across countries)
 # ------------------------------
 print("Computing contagion matrix...")
+
 df["year"] = pd.to_datetime(df["date"]).dt.year
+
+# Create country vs year matrix: each cell = avg crisis probability
 country_year = df.groupby(["country", "year"])["crisis_prob"].mean().unstack()
-corr_matrix = country_year.corr()
+
+# Now compute correlation BETWEEN countries
+corr_matrix = country_year.T.corr()   # Transpose before corr()
 
 plt.figure(figsize=(12, 10))
 sns.heatmap(corr_matrix, cmap="magma", annot=False)
 plt.title("Contagion Risk Between Countries")
 plt.tight_layout()
+
 output_contagion = BASE_DIR.parent / "data" / "contagion_matrix.png"
 plt.savefig(output_contagion, dpi=300)
 print(f"✔ Saved: {output_contagion}")
