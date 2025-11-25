@@ -1,42 +1,35 @@
-# Early Warning System for the Greek Financial Crisis
+# Crisis Risk Identification System for Economic Stability (C.R.I.S.E.S)
 
 ## Overview
-This project develops a simple, interpretable **early warning system** to detect rising financial risk before the outbreak of the **Greek sovereign debt crisis**.  
-By combining **economic theory** with **machine learning**, the model uses fiscal and market indicators—such as deficits, debt-to-GDP, and bond yield spreads—to predict the likelihood of a crisis period.
+This project builds a global financial crisis early warning system that detects and forecasts economic stress using Gaussian Mixture Models, regime probability smoothing, and a dashboard-based decision support tool.
+
+Using macroeconomic shock indicators from bond yields, CDS spreads, and government deficits, the model identifies hidden economic regimes (Normal, Stress, Crisis) and generates next-month crisis alerts using machine learning and time series forecasting.
 
 The emphasis is on **clarity and interpretability**, showing how even basic machine learning tools can complement economic reasoning for crisis forecasting.
 
 ---
 
 ## Objectives
-- Build a transparent **early-warning system** for financial instability in Greece.
-- Identify which **macroeconomic and market indicators** signal rising risk.
-- Demonstrate how **machine learning** can enhance economic analysis without overcomplicating it.
+- Detect macro-financial stress periods using unsupervised clustering
+- Reveal hidden economic regimes across countries
+- Predict regime transitions (next-month crisis likelihood)
+- Build an interactive Streamlit dashboard for policymakers and analysts
+- Support interpretation using feature importance, contagion maps, and regime evolution
 
 ---
 
 ## Methodology
 
-### 1. Data Preparation (`model.py`)
-- Reads multiple `.csv` files from `/data`
-- Automatically detects header rows
-- Cleans, renames, and merges data into a single dataset
-- Outputs `merged_cleaned_dataset.csv`
-
-### 2. Model Training (`train_model.py`)
-- Loads the cleaned dataset
-- Creates a binary **crisis label**
-- Balances the dataset through upsampling
-- Imputes missing values and scales features
-- Trains a **Logistic Regression** classifier
-- Evaluates results using accuracy and classification metrics
-- Saves model artifacts (`.pkl` files) for reuse
-
-### 3. Prediction Visualization (`Visualize_predictions.py`)
-- Loads trained model and preprocessing tools
-- Predicts **crisis probabilities** for each observation
-- Displays top 10 highest-risk years or countries
-- Saves both `.csv` and `.png` outputs for presentation
+| Step | Description |
+|------------|-------------|
+| Feature Engineering | Rolling mean and volatility shocks for bond, CDS, and deficit | 
+| Regime Detection | Gaussian Mixture Model (GMM) identifies hidden economic states | 
+| Smoothing | 6-month rolling average improves crisis probability stability | 
+| Forecasting | Random Forest predicts next-month regime transitions | 
+| Alerting | Binary crisis_alert + traffic-light risk levels |
+| Validation | TimeSeriesSplit (chronological), prevents future leakage |
+| Visualization |	Contagion matrix, regime evolution, probability trends | 
+| Dashboard | Interactive, filterable, exportable Streamlit interface | 
 
 ---
 
@@ -69,17 +62,6 @@ The model should not be viewed as a predictor of exact crises but as a **decisio
 
 ---
 
-## Outputs
-- **Data visualization**: `top10_crisis_probs.png`
-- **Predicted probabilities**: `top10_crisis_probs.csv`
-- **Reusable model files**: `crisis_model.pkl`, `imputer.pkl`, `scaler.pkl`
-
-Example figure:
-
-![Top 10 Crisis Probabilities](data/top10_crisis_probs.png)
-
----
-
 License
 
 This project is for educational and academic purposes only.
@@ -90,20 +72,14 @@ You may reuse or adapt the code with proper citation.
 ## How to Run
 
 ### Prerequisites
-Install dependencies:
+Install necessary dependencies:
 ```bash
-pip install pandas numpy scikit-learn matplotlib joblib
-Run the pipeline:
-bash
-Copy code
-# Step 1: Clean and merge data
-python model.py
+Run the Streamlit dashboard:
+streamlit run src/dashboard_app.py
 
-# Step 2: Train model
-python train_model.py
 
-# Step 3: Visualize predictions
-python Visualize_predictions.py
+
+
 
 
 
