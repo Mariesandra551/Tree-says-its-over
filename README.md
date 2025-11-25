@@ -59,9 +59,10 @@ The model captures **pre-crisis stress buildup**, demonstrating early warning po
 
 ## How to Run
 
-**1. Install dependencies**
-pip install -r requirements.txt
+**1. Install dependencies:**
+ pip install -r requirements.txt
 
-**2. Launch dashboard**
-streamlit run src/dashboard_app.py
+**2. Launch dashboard:**
+ streamlit run src/dashboard_app.py
+
 
